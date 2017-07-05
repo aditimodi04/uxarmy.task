@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">UIDemo</string>
+    <string name="app_name">Camera Scan</string>
     <string name="scanAgain">Scan Again</string>
     <string name="scanColors">Scan Colours</string>
     <string name="allColorsScanned">All Colours within the \n frame will be scanned.</string>
