@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -55,6 +56,9 @@
                 android:id="@+id/rvAddColor"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/btn_height_50dp"
+                android:layout_marginBottom="@dimen/padding_1dp"
+                android:layout_marginEnd="@dimen/padding_1dp"
+                android:layout_marginRight="@dimen/padding_1dp"
                 android:orientation="vertical" />
         </LinearLayout>
 

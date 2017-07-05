@@ -43,9 +43,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);
-            if (!hasPermission()) {
-                ActivityCompat.requestPermissions(this, PERMISSIONS, 11);
-            } else {
+            if (hasPermission()) {
                 init();
             }
         } catch (NullPointerException e) {
@@ -124,7 +122,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             camera = Camera.open();
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(this, "Camera Not found", Toast.LENGTH_LONG).show();
         }
         return camera;
     }

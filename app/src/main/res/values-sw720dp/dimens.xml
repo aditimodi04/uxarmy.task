@@ -13,4 +13,5 @@
     <dimen name="font_18sp">36sp</dimen>
     <dimen name="padding_5dp">10dp</dimen>
     <dimen name="padding_1dp">2dp</dimen>
+    <dimen name="palette_width">300dp</dimen>
 </resources>

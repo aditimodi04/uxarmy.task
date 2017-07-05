@@ -7,6 +7,7 @@
     <View
         android:id="@+id/viewPalette"
         android:layout_width="@dimen/btn_height_50dp"
-        android:padding="1dp"
-        android:layout_height="@dimen/btn_height_50dp" />
+        android:layout_height="@dimen/btn_height_50dp"
+        android:layout_marginLeft="@dimen/padding_1dp"
+        android:layout_marginStart="@dimen/padding_1dp" />
 </LinearLayout>
