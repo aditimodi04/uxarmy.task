@@ -20,17 +20,15 @@
         android:src="@mipmap/ic_cancel"
         android:tint="@android:color/white" />
 
-    <TextView
+    <uxarmy.uidemo.custom.SemiBoldTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_margin="@dimen/margin_15dp"
-        android:fontFamily="sans-serif"
         android:gravity="center"
         android:text="@string/allColorsScanned"
         android:textColor="@android:color/white"
-        android:textSize="@dimen/font_18sp"
-        android:textStyle="bold" />
+        android:textSize="@dimen/font_18sp" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -72,17 +70,15 @@
 
     </FrameLayout>
 
-    <Button
+    <uxarmy.uidemo.custom.SemiBoldButton
         android:id="@+id/btnScan"
         android:layout_width="match_parent"
         android:layout_height="@dimen/btn_height_50dp"
         android:layout_alignParentBottom="true"
         android:layout_margin="@dimen/margin_15dp"
         android:background="@drawable/rounded_bg"
-        android:fontFamily="sans-serif"
         android:text="@string/scanColors"
         android:textAllCaps="false"
         android:textColor="@android:color/white"
-        android:textSize="@dimen/font_18sp"
-        android:textStyle="bold" />
+        android:textSize="@dimen/font_18sp" />
 </RelativeLayout>

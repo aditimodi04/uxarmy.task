@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import uxarmy.uidemo.CameraApp;
 import uxarmy.uidemo.R;
 import uxarmy.uidemo.custom.CameraSurfaceView;
 import uxarmy.uidemo.shared_prefs.AppPreferences;
@@ -113,6 +114,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         imvCancel = (ImageView) findViewById(R.id.imvCancel);
         btnScan.setOnClickListener(this);
         imvCancel.setOnClickListener(this);
+        btnScan.setTypeface(CameraApp.getTypeFaceSemiBold());
     }
 
 
