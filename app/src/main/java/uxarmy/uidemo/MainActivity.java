@@ -1,6 +1,7 @@
 package uxarmy.uidemo;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,6 +13,7 @@ import android.renderscript.ScriptIntrinsicBlur;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -19,6 +21,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -138,27 +141,44 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    Camera.ShutterCallback myShutterCallback = new Camera.ShutterCallback(){
+    Camera.ShutterCallback myShutterCallback = new Camera.ShutterCallback() {
 
         public void onShutter() {
             // TODO Auto-generated method stub
-        }};
+        }
+    };
 
-    Camera.PictureCallback myPictureCallback_RAW = new Camera.PictureCallback(){
+    Camera.PictureCallback myPictureCallback_RAW = new Camera.PictureCallback() {
 
         public void onPictureTaken(byte[] arg0, Camera arg1) {
             // TODO Auto-generated method stub
-        }};
+        }
+    };
 
-    Camera.PictureCallback myPictureCallback_JPG = new Camera.PictureCallback(){
+    Camera.PictureCallback myPictureCallback_JPG = new Camera.PictureCallback() {
 
         public void onPictureTaken(byte[] arg0, Camera arg1) {
             // TODO Auto-generated method stub
             Bitmap bitmapPicture = BitmapFactory.decodeByteArray(arg0, 0, arg0.length);
 
             Bitmap correctBmp = Bitmap.createBitmap(bitmapPicture, 0, 0, bitmapPicture.getWidth(), bitmapPicture.getHeight(), null, true);
+            String stringBitmap = BitMapToString(correctBmp);
+            Intent intent = new Intent(MainActivity.this, ColorActivity.class);
+            intent.putExtra("bitmap", stringBitmap);
+            startActivity(intent);
 
-        }};
+        }
+    };
+
+
+    public String BitMapToString(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] b = baos.toByteArray();
+        String temp = Base64.encodeToString(b, Base64.DEFAULT);
+        return temp;
+    }
+
     @Override
     public void onClick(View v) {
         int vId = v.getId();
@@ -167,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (mCamera != null) {
                     mCamera.takePicture(myShutterCallback, myPictureCallback_RAW, myPictureCallback_JPG);
                 }
-             //   Blurry.with(this).sampling(10).onto((ViewGroup) preview);
+                //   Blurry.with(this).sampling(10).onto((ViewGroup) preview);
 //                getWindow().addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
                 break;
         }
