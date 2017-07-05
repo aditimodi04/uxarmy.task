@@ -75,30 +75,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private boolean hasPermission() {
-        List<String> permissionsNeeded = new ArrayList<String>();
-        final List<String> permissionsList = new ArrayList<String>();
-        if (!addPermission(permissionsList, Manifest.permission.WRITE_EXTERNAL_STORAGE))
-            permissionsNeeded.add("write external storage");
-        if (!addPermission(permissionsList, Manifest.permission.READ_EXTERNAL_STORAGE))
-            permissionsNeeded.add("Read external storage");
-        if (!addPermission(permissionsList, Manifest.permission.CAMERA))
-            permissionsNeeded.add("Camera");
-        if (permissionsList.size() > 0) {
-            if (permissionsNeeded.size() > 0) {
-                for (int i = 1; i < permissionsNeeded.size(); i++)
-                    ActivityCompat.requestPermissions(this, permissionsList.toArray(new String[permissionsList.size()]), 11);
-
+        boolean allPermissionEnabled = true;
+        for (String PERMISSION : PERMISSIONS) {
+            if (!addPermission(PERMISSION)) {
+                allPermissionEnabled = false;
+                break;
             }
-            ActivityCompat.requestPermissions(this, permissionsList.toArray(new String[permissionsList.size()]), 11);
         }
-        return permissionsNeeded.isEmpty();
+        if (!allPermissionEnabled) {
+            ActivityCompat.requestPermissions(this, PERMISSIONS, 11);
+            return false;
+        }
+        return true;
 
 
     }
 
-    private boolean addPermission(List<String> permissionsList, String permission) {
+    private boolean addPermission(String permission) {
         if (ActivityCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
-            permissionsList.add(permission);
             if (!ActivityCompat.shouldShowRequestPermissionRationale(this, permission))
                 return false;
         }
