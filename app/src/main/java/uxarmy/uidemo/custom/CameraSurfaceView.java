@@ -1,4 +1,4 @@
-package uxarmy.uidemo;
+package uxarmy.uidemo.custom;
 
 /**
  * Created by Admin on 4/7/2016.
@@ -29,6 +29,9 @@ public class CameraSurfaceView extends SurfaceView implements
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         try {
+            if (mCamera == null) {
+                return;
+            }
             mCamera.setDisplayOrientation(90);
             mCamera.setPreviewDisplay(surfaceHolder);
             mCamera.startPreview();
@@ -39,14 +42,16 @@ public class CameraSurfaceView extends SurfaceView implements
 
     @Override
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
-        mCamera.stopPreview();
-        mCamera.release();
+        releaseCamera();
     }
 
     @Override
     public void surfaceChanged(SurfaceHolder surfaceHolder, int format,
                                int width, int height) {
         try {
+            if (mCamera == null) {
+                return;
+            }
             mCamera.setDisplayOrientation(90);
             mCamera.setPreviewDisplay(surfaceHolder);
             mCamera.startPreview();
@@ -55,8 +60,14 @@ public class CameraSurfaceView extends SurfaceView implements
         }
     }
 
-    private void setCameraMode() {
-        Camera.Parameters parameters = mCamera.getParameters();
-
+    public void releaseCamera() {
+        if (mCamera == null) {
+            return;
+        }
+        mCamera.setPreviewCallback(null);
+        mCamera.stopPreview();
+        mCamera.release();
+        mSurfaceHolder.removeCallback(this);
+        mCamera = null;
     }
 }

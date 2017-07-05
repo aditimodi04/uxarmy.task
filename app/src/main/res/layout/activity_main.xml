@@ -4,7 +4,7 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="uxarmy.uidemo.MainActivity">
+    tools:context="uxarmy.uidemo.view_controllers.MainActivity">
 
     <FrameLayout
         android:id="@+id/svCamera"
@@ -15,8 +15,20 @@
         android:id="@+id/imvCancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/app_name"
+        android:padding="@dimen/padding_5dp"
         android:src="@mipmap/ic_cancel"
         android:tint="@android:color/white" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_margin="@dimen/margin_15dp"
+        android:gravity="center"
+        android:text="@string/allColorsScanned"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/font_18sp" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -65,5 +77,8 @@
         android:layout_alignParentBottom="true"
         android:layout_margin="@dimen/margin_15dp"
         android:background="@drawable/rounded_bg"
-        android:text="Scan Colors" />
+        android:text="@string/scanColors"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/font_18sp" />
 </RelativeLayout>

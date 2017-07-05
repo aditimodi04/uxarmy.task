@@ -1,4 +1,4 @@
-package uxarmy.uidemo;
+package uxarmy.uidemo.view_controllers;
 
 import android.Manifest;
 import android.content.Intent;
@@ -7,18 +7,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.os.Bundle;
-import android.renderscript.Allocation;
-import android.renderscript.RenderScript;
-import android.renderscript.ScriptIntrinsicBlur;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
@@ -27,17 +23,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import jp.wasabeef.blurry.Blurry;
+import uxarmy.uidemo.R;
+import uxarmy.uidemo.custom.CameraSurfaceView;
+import uxarmy.uidemo.shared_prefs.AppPreferences;
+import uxarmy.uidemo.utilities.Util;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, Camera.PictureCallback {
 
     private Button btnScan;
     private Camera mCamera;
     private CameraSurfaceView mCameraView;
     String[] PERMISSIONS = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
-    private ScriptIntrinsicBlur blur;
-    private View activity_main;
     private FrameLayout preview;
+    private ImageView imvCancel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,15 +47,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } else {
                 init();
             }
-
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        } catch (ClassCastException e) {
+            e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        try {
+            initializeCamera();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void initializeCamera() {
+        if (mCamera == null) {
+            mCamera = getCameraInstance();
+            mCameraView = new CameraSurfaceView(this, mCamera);
+            preview = (FrameLayout) findViewById(R.id.svCamera);
+            preview.addView(mCameraView);
+        }
+    }
+
     private boolean hasPermission() {
         List<String> permissionsNeeded = new ArrayList<String>();
-
         final List<String> permissionsList = new ArrayList<String>();
         if (!addPermission(permissionsList, Manifest.permission.WRITE_EXTERNAL_STORAGE))
             permissionsNeeded.add("write external storage");
@@ -73,10 +92,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
             ActivityCompat.requestPermissions(this, permissionsList.toArray(new String[permissionsList.size()]), 11);
         }
-        if (permissionsNeeded.isEmpty()) {
-            return true;
-        }
-        return false;
+        return permissionsNeeded.isEmpty();
 
 
     }
@@ -92,13 +108,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     private void init() {
-        activity_main = (View) findViewById(R.id.activity_main);
-        mCamera = getCameraInstance();
-        mCameraView = new CameraSurfaceView(this, mCamera);
-        preview = (FrameLayout) findViewById(R.id.svCamera);
-        preview.addView(mCameraView);
+        initializeCamera();
         btnScan = (Button) findViewById(R.id.btnScan);
+        imvCancel = (ImageView) findViewById(R.id.imvCancel);
         btnScan.setOnClickListener(this);
+        imvCancel.setOnClickListener(this);
     }
 
 
@@ -107,7 +121,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         try {
             camera = Camera.open();
         } catch (Exception e) {
-            // cannot get camera or does not exist
+            e.printStackTrace();
+            Toast.makeText(this, "Camera Not found", Toast.LENGTH_LONG).show();
         }
         return camera;
     }
@@ -141,37 +156,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    Camera.ShutterCallback myShutterCallback = new Camera.ShutterCallback() {
 
-        public void onShutter() {
-            // TODO Auto-generated method stub
-        }
-    };
-
-    Camera.PictureCallback myPictureCallback_RAW = new Camera.PictureCallback() {
-
-        public void onPictureTaken(byte[] arg0, Camera arg1) {
-            // TODO Auto-generated method stub
-        }
-    };
-
-    Camera.PictureCallback myPictureCallback_JPG = new Camera.PictureCallback() {
-
-        public void onPictureTaken(byte[] arg0, Camera arg1) {
-            // TODO Auto-generated method stub
-            Bitmap bitmapPicture = BitmapFactory.decodeByteArray(arg0, 0, arg0.length);
-
-            Bitmap correctBmp = Bitmap.createBitmap(bitmapPicture, 0, 0, bitmapPicture.getWidth(), bitmapPicture.getHeight(), null, true);
-            String stringBitmap = BitMapToString(correctBmp);
-            Intent intent = new Intent(MainActivity.this, ColorActivity.class);
-            intent.putExtra("bitmap", stringBitmap);
-            startActivity(intent);
-
-        }
-    };
+    private void openActivity(String stringBitmap) {
+        AppPreferences.setImageStringBitmap(stringBitmap);
+        AppPreferences.savePreferences();
+        Intent intent = new Intent(MainActivity.this, ColorActivity.class);
+        startActivity(intent);
+        Util.startActAnimation(this);
+        Util.dismissProDialog();
+    }
 
 
-    public String BitMapToString(Bitmap bitmap) {
+    private String BitMapToString(Bitmap bitmap) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
         byte[] b = baos.toByteArray();
@@ -185,28 +181,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (vId) {
             case R.id.btnScan:
                 if (mCamera != null) {
-                    mCamera.takePicture(myShutterCallback, myPictureCallback_RAW, myPictureCallback_JPG);
+                    Util.showProDialog(this);
+                    mCamera.takePicture(null, null, this);
                 }
-                //   Blurry.with(this).sampling(10).onto((ViewGroup) preview);
-//                getWindow().addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
+                break;
+            case R.id.imvCancel:
+                onBackPressed();
+                break;
+            default:
                 break;
         }
     }
 
-    Bitmap BlurImage(Bitmap input) {
-        android.renderscript.RenderScript rsScript = RenderScript.create(this);
-        android.renderscript.Allocation alloc = Allocation.createFromBitmap(rsScript, input);
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mCameraView.releaseCamera();
+        mCamera = null;
+    }
 
-        blur = ScriptIntrinsicBlur.create(rsScript, alloc.getElement());
-        blur.setRadius(12);
-        blur.setInput(alloc);
+    @Override
+    public void onPictureTaken(byte[] data, Camera camera) {
+        Bitmap bitmapPicture = BitmapFactory.decodeByteArray(data, 0, data.length);
 
-        Bitmap result = Bitmap.createBitmap(input.getWidth(), input.getHeight(), input.getConfig());
-        android.renderscript.Allocation outAlloc = Allocation.createFromBitmap(rsScript, result);
-        blur.forEach(outAlloc);
-        outAlloc.copyTo(result);
-
-        rsScript.destroy();
-        return result;
+        Bitmap correctBmp = Bitmap.createBitmap(bitmapPicture, 0, 0, bitmapPicture.getWidth(), bitmapPicture.getHeight(), null, true);
+        String stringBitmap = BitMapToString(correctBmp);
+        try {
+            openActivity(stringBitmap);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

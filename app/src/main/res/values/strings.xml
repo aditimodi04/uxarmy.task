@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">UIDemo</string>
+    <string name="scanAgain">Scan Again</string>
+    <string name="scanColors">Scan Colours</string>
+    <string name="allColorsScanned">All Colours within the \n frame will be scanned.</string>
+    <string name="paletteBoxText">Perfumed Powder \n NP N 1845 P</string>
+    <string name="addColors">Add Colors to palette (+)</string>
 </resources>

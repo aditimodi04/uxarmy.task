@@ -2,7 +2,7 @@
     <dimen name="activity_horizontal_margin">32dp</dimen>
     <dimen name="activity_vertical_margin">32dp</dimen>
     <dimen name="scan_border">140dp</dimen>
-    <dimen name="scan_border_width">10dp</dimen>
+    <dimen name="scan_border_width">6dp</dimen>
     <dimen name="margin_15dp">30dp</dimen>
     <dimen name="btn_corner_25dp">50dp</dimen>
     <dimen name="btn_height_50dp">100dp</dimen>
