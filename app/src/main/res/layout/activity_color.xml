@@ -40,11 +40,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#99000000"
+                android:fontFamily="sans-serif"
                 android:gravity="center"
                 android:padding="@dimen/margin_15dp"
                 android:text="@string/paletteBoxText"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/font_12sp" />
+                android:textSize="@dimen/font_12sp"
+                android:textStyle="bold" />
 
             <View
                 android:id="@+id/imvSelectedColor"
@@ -66,12 +68,14 @@
             android:layout_height="@dimen/btn_height_50dp"
             android:layout_margin="@dimen/margin_15dp"
             android:background="#80000000"
+            android:fontFamily="sans-serif"
             android:paddingLeft="@dimen/margin_15dp"
             android:paddingRight="@dimen/margin_15dp"
             android:text="@string/addColors"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/font_18sp" />
+            android:textSize="@dimen/font_18sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <Button
@@ -81,7 +85,9 @@
         android:layout_alignParentBottom="true"
         android:layout_margin="@dimen/margin_15dp"
         android:background="@drawable/rounded_bg"
+        android:fontFamily="sans-serif"
         android:text="@string/scanAgain"
         android:textColor="@android:color/white"
-        android:textSize="@dimen/font_18sp" />
+        android:textSize="@dimen/font_18sp"
+        android:textStyle="bold" />
 </RelativeLayout>

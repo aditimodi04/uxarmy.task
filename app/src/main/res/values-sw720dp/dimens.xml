@@ -7,4 +7,10 @@
     <dimen name="btn_corner_25dp">50dp</dimen>
     <dimen name="btn_height_50dp">100dp</dimen>
     <dimen name="scan_hide">-20dp</dimen>
+    <dimen name="font_12sp">24sp</dimen>
+    <dimen name="font_14sp">28sp</dimen>
+    <dimen name="font_16sp">32sp</dimen>
+    <dimen name="font_18sp">36sp</dimen>
+    <dimen name="padding_5dp">10dp</dimen>
+    <dimen name="padding_1dp">2dp</dimen>
 </resources>
