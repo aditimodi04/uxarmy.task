@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:bottom="@dimen/scan_hide"
+        android:right="@dimen/scan_hide">
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/transparent" />
+            <stroke
+                android:width="@dimen/scan_border_width"
+                android:color="@android:color/white" />
+        </shape>
+    </item>
+</layer-list>

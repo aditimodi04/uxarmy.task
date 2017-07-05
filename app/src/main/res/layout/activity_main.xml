@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="uxarmy.uidemo.MainActivity">
+
+    <FrameLayout
+        android:id="@+id/svCamera"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
+
+    <ImageView
+        android:id="@+id/imvCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_cancel"
+        android:tint="@android:color/white" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/btnScan"
+        android:layout_below="@+id/imvCancel"
+        android:layout_margin="@dimen/margin_15dp"
+        android:background="@android:color/transparent">
+
+        <View
+            android:layout_width="@dimen/scan_border"
+            android:layout_height="@dimen/scan_border"
+            android:layout_gravity="top|start"
+            android:background="@drawable/scan" />
+
+
+        <View
+            android:layout_width="@dimen/scan_border"
+            android:layout_height="@dimen/scan_border"
+            android:layout_gravity="top|end"
+            android:background="@drawable/scan"
+            android:rotation="90" />
+
+
+        <View
+            android:layout_width="@dimen/scan_border"
+            android:layout_height="@dimen/scan_border"
+            android:layout_gravity="bottom|start"
+            android:background="@drawable/scan"
+            android:rotation="270" />
+
+
+        <View
+            android:layout_width="@dimen/scan_border"
+            android:layout_height="@dimen/scan_border"
+            android:layout_gravity="bottom|end"
+            android:background="@drawable/scan"
+            android:rotation="180" />
+
+    </FrameLayout>
+
+    <Button
+        android:id="@+id/btnScan"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/btn_height_50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/margin_15dp"
+        android:background="@drawable/rounded_bg"
+        android:text="Scan Colors" />
+</RelativeLayout>
