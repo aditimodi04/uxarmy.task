@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.Camera;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -18,9 +19,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import uxarmy.uidemo.CameraApp;
@@ -150,13 +149,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    private void openActivity(String stringBitmap) {
-        AppPreferences.setImageStringBitmap(stringBitmap);
-        AppPreferences.savePreferences();
+    private void openActivity() {
         Intent intent = new Intent(MainActivity.this, ColorActivity.class);
         startActivity(intent);
         Util.startActAnimation(this);
-        Util.dismissProDialog();
     }
 
 
@@ -195,14 +191,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onPictureTaken(byte[] data, Camera camera) {
-        Bitmap bitmapPicture = BitmapFactory.decodeByteArray(data, 0, data.length);
+        new CapturingImage(data).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
 
-        Bitmap correctBmp = Bitmap.createBitmap(bitmapPicture, 0, 0, bitmapPicture.getWidth(), bitmapPicture.getHeight(), null, true);
-        String stringBitmap = BitMapToString(correctBmp);
-        try {
-            openActivity(stringBitmap);
-        } catch (Exception e) {
-            e.printStackTrace();
+    private class CapturingImage extends AsyncTask<Void, Void, Void> {
+
+        private byte[] data;
+
+        CapturingImage(byte[] data) {
+            this.data = data;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            Bitmap bitmapPicture = BitmapFactory.decodeByteArray(data, 0, data.length);
+
+            Bitmap correctBmp = Bitmap.createBitmap(bitmapPicture, 0, 0, bitmapPicture.getWidth(), bitmapPicture.getHeight(), null, true);
+            String stringBitmap = BitMapToString(correctBmp);
+            AppPreferences.setImageStringBitmap(stringBitmap);
+            AppPreferences.savePreferences();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            Util.dismissProDialog();
+            openActivity();
         }
     }
 }
